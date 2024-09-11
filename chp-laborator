@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int ayb(int a, int b) {
+    while(b != 0){
+        int c = b;
+        b = a % b;
+        a = c;
+    }
+    return a;
+}
+
+int main(){
+    int num1, num2;
+    cout << "input two integers:";
+    cin >> num1 >> num2;
+    cout << "AYB:" << ayb(num1, num2) << endl;
+    return 0;
+}
