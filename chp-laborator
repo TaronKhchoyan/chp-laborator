@@ -1,20 +1,169 @@
-//amenamec yndhanur bazmapatik
-#include <iostream>
-using namespace std;
-
-int ayb(int a, int b) {
-    while(b != 0){
-        int c = b;
+//GCD:
+function gcd(a, b) {
+    while (b !== 0) {
+        let temp = b;
         b = a % b;
-        a = c;
+        a = temp;
     }
     return a;
 }
 
-int main(){
-    int num1, num2;
-    cout << "input two integers:";
-    cin >> num1 >> num2;
-    cout << "AYB:" << ayb(num1, num2) << endl;
-    return 0;
+let num1 = +prompt('input a first number');
+let num2 = +prompt('input a second number');
+console.log("GCD:", gcd(num1, num2)); 
+
+______________________________________________________
+
+//LCM:
+
+function gcd(a, b) {
+    while (b !== 0) {
+        let temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
 }
+
+function lcm(a, b) {
+    return Math.abs(a * b) / gcd(a, b);
+}
+
+let num1 = +prompt('input a first number');
+let num2 = +prompt('input a second number');
+console.log("LCM:", lcm(num1, num2));
+
+________________________________________________
+
+//MissedNumber:
+function MissedNumber(arr) {
+    const n = arr.length + 1;
+    const expectedSum = (n * (n + 1)) / 2; 
+    const actualSum = arr.reduce((sum, num) => sum + num, 0); 
+    return expectedSum - actualSum; 
+}
+
+const arr = [1, 2, 4, 5, 6];
+console.log(MissedNumber(arr));
+
+_____________________________________________________________
+
+//ParzPoxarinum:
+
+function simpleSubstitutionCipher(text, shift) {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const alphabetUpper = alphabet.toUpperCase();
+    
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+
+        if (alphabet.includes(char)) {
+            const index = alphabet.indexOf(char);
+            const newIndex = (index + shift) % alphabet.length;
+            result += alphabet[newIndex];
+        } else if (alphabetUpper.includes(char)) {
+            const index = alphabetUpper.indexOf(char);
+            const newIndex = (index + shift) % alphabetUpper.length;
+            result += alphabetUpper[newIndex];
+        } else {
+            result += char;
+        }
+    }
+
+    return result;
+}
+
+const text = "Hello, World!";
+const shift = 3;
+console.log(simpleSubstitutionCipher(text, shift)); // "Khoor, Zruog!"
+
+___________________________________________________________________________
+
+//Caesar:
+
+function caesarCipher(text, shift) {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const alphabetUpper = alphabet.toUpperCase();
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+
+        if (alphabet.includes(char)) {
+            const index = (alphabet.indexOf(char) + shift) % alphabet.length;
+            result += alphabet[index];
+        }
+        else if (alphabetUpper.includes(char)) {
+            const index = (alphabetUpper.indexOf(char) + shift) % alphabetUpper.length;
+            result += alphabetUpper[index];
+        }
+        else {
+            result += char;
+        }
+    }
+
+    return result;
+}
+
+const text = "Hello, World!";
+const shift = 3;
+console.log(caesarCipher(text, shift)); // "Khoor, Zruog!"
+
+
+_______________________________________________________
+
+//ToxerSyuner:
+
+function encryptRowsColumns(text, numColumns) {
+    const rows = [];
+    let currentRow = '';
+
+    for (let i = 0; i < text.length; i++) {
+        currentRow += text[i];
+        if (currentRow.length === numColumns) {
+            rows.push(currentRow);
+            currentRow = '';
+        }
+    }
+    if (currentRow) {
+        rows.push(currentRow.padEnd(numColumns, ' ')); 
+    }
+
+    let encryptedText = '';
+    for (let col = 0; col < numColumns; col++) {
+        for (let row = 0; row < rows.length; row++) {
+            encryptedText += rows[row][col];
+        }
+    }
+
+    return encryptedText;
+}
+
+const text = "Hello, World!";
+const numColumns = 4;
+console.log(encryptRowsColumns(text, numColumns)); // "Hoo!el,Wrdl l"
+
+______________________________________________________________
+
+//RLE:
+
+function rleEncode(text) {
+    let encodedText = '';
+    let count = 1;
+
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] === text[i + 1]) {
+            count++;
+        } else {
+            encodedText += text[i] + count;
+            count = 1;
+        }
+    }
+
+    return encodedText;
+}
+
+const text = "AAAABBBCCDAA";
+console.log(rleEncode(text)); // "A4B3C2D1A2"
