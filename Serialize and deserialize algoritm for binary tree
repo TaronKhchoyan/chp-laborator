@@ -1,0 +1,42 @@
+// Определение узла бинарного дерева
+class TreeNode {
+  constructor(value, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+// Функция сериализации: дерево -> строка
+function serialize(root) {
+  if (root === null) return "null"; // Пустой узел представляем как 'null'
+  return `${root.value},${serialize(root.left)},${serialize(root.right)}`;
+}
+
+// Функция десериализации: строка -> дерево
+function deserialize(data) {
+  const values = data.split(",");
+
+  function buildTree() {
+    const value = values.shift();
+    if (value === "null") return null; // Восстановление пустого узла
+    const node = new TreeNode(parseInt(value));
+    node.left = buildTree();
+    node.right = buildTree();
+    return node;
+  }
+
+  return buildTree();
+}
+
+// Пример использования
+const tree = new TreeNode(1, new TreeNode(2), new TreeNode(3, new TreeNode(4), new TreeNode(5)));
+console.log("Исходное дерево:", tree);
+
+// Сериализация
+const serializedTree = serialize(tree);
+console.log("\nСериализованное дерево:", serializedTree);
+
+// Десериализация
+const deserializedTree = deserialize(serializedTree);
+console.log("\nДесериализованное дерево:", deserializedTree);
