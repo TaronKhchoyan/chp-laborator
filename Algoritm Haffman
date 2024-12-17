@@ -1,0 +1,98 @@
+class Node {
+  constructor(char, freq, left = null, right = null) {
+    this.char = char; // символ
+    this.freq = freq; // частота
+    this.left = left; // левый потомок
+    this.right = right; // правый потомок
+  }
+}
+
+// Функция для построения дерева Хаффмана
+function buildHuffmanTree(frequencies) {
+  // Создаем массив узлов
+  const nodes = Object.entries(frequencies).map(([char, freq]) => new Node(char, freq));
+
+  // Пока в массиве больше одного узла
+  while (nodes.length > 1) {
+    // Сортируем узлы по возрастанию частоты
+    nodes.sort((a, b) => a.freq - b.freq);
+
+    // Извлекаем два узла с наименьшей частотой
+    const left = nodes.shift();
+    const right = nodes.shift();
+
+    // Создаем новый объединяющий узел
+    const newNode = new Node(null, left.freq + right.freq, left, right);
+
+    // Добавляем новый узел обратно в массив
+    nodes.push(newNode);
+  }
+
+  // Возвращаем корень дерева
+  return nodes[0];
+}
+
+// Функция для получения кодов Хаффмана
+function generateHuffmanCodes(node, code = '', codes = {}) {
+  if (node == null) return;
+
+  // Если это листовой узел, сохраняем код для символа
+  if (node.char != null) {
+    codes[node.char] = code;
+  }
+
+  // Рекурсивно идем влево и вправо
+  generateHuffmanCodes(node.left, code + '0', codes);
+  generateHuffmanCodes(node.right, code + '1', codes);
+
+  return codes;
+}
+
+// Пример использования
+const text = "huffman coding algorithm example";
+
+// Шаг 1: Подсчет частот символов
+const frequencies = {};
+for (const char of text) {
+  frequencies[char] = (frequencies[char] || 0) + 1;
+}
+
+// Шаг 2: Построение дерева Хаффмана
+const huffmanTree = buildHuffmanTree(frequencies);
+
+// Шаг 3: Генерация кодов
+const huffmanCodes = generateHuffmanCodes(huffmanTree);
+
+console.log("Символы и их коды Хаффмана:");
+for (const [char, code] of Object.entries(huffmanCodes)) {
+  console.log(`'${char}': ${code}`);
+}
+
+// Шаг 4: Кодирование текста
+let encodedText = '';
+for (const char of text) {
+  encodedText += huffmanCodes[char];
+}
+console.log("\nЗакодированный текст:");
+console.log(encodedText);
+
+// Шаг 5: Декодирование текста
+function decodeHuffmanText(encodedText, tree) {
+  let decodedText = '';
+  let currentNode = tree;
+
+  for (const bit of encodedText) {
+    currentNode = bit === '0' ? currentNode.left : currentNode.right;
+
+    // Если достигнут листовой узел
+    if (currentNode.char != null) {
+      decodedText += currentNode.char;
+      currentNode = tree; // возвращаемся к корню
+    }
+  }
+
+  return decodedText;
+}
+
+console.log("\nДекодированный текст:");
+console.log(decodeHuffmanText(encodedText, huffmanTree));
