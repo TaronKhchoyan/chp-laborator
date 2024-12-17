@@ -1,0 +1,69 @@
+function lz77Compress(input, windowSize = 20, lookaheadBufferSize = 15) {
+  const compressed = [];
+  let cursor = 0;
+
+  while (cursor < input.length) {
+    let matchLength = 0;
+    let matchDistance = 0;
+    let nextChar = input[cursor];
+
+    const windowStart = Math.max(0, cursor - windowSize);
+    const searchWindow = input.substring(windowStart, cursor);
+
+    for (let i = 0; i < searchWindow.length; i++) {
+      let length = 0;
+
+      while (
+        length < lookaheadBufferSize &&
+        cursor + length < input.length &&
+        searchWindow[i + length] === input[cursor + length]
+      ) {
+        length++;
+      }
+
+      if (length > matchLength) {
+        matchLength = length;
+        matchDistance = searchWindow.length - i;
+        nextChar = input[cursor + length];
+      }
+    }
+
+    compressed.push({ distance: matchDistance, length: matchLength, char: nextChar });
+    cursor += matchLength + 1;
+  }
+
+  return compressed;
+}
+
+function lz77Decompress(compressed) {
+  let output = '';
+
+  for (const { distance, length, char } of compressed) {
+    if (distance > 0) {
+      const start = output.length - distance;
+      for (let i = 0; i < length; i++) {
+        output += output[start + i];
+      }
+    }
+    output += char;
+  }
+
+  return output;
+}
+
+// Пример использования
+const text = "abcabcabcabcabcd";
+console.log("Исходный текст:", text);
+
+// Сжатие
+const compressed = lz77Compress(text);
+console.log("\nСжатые данные:");
+console.log(compressed);
+
+// Декомпрессия
+const decompressed = lz77Decompress(compressed);
+console.log("\nДекомпрессированный текст:");
+console.log(decompressed);
+
+// Проверка корректности
+console.log("\nКорректность декомпрессии:", text === decompressed);
