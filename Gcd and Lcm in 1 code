@@ -1,0 +1,28 @@
+// Функция для вычисления GCD (Наибольшего общего делителя) с использованием алгоритма Евклида
+function gcd(a, b) {
+  while (b !== 0) {
+    const temp = b;
+    b = a % b;
+    a = temp;
+  }
+  return Math.abs(a); // Возвращаем абсолютное значение
+}
+
+// Функция для вычисления LCM (Наименьшего общего кратного)
+function lcm(a, b) {
+  return Math.abs(a * b) / gcd(a, b); // Формула: LCM = (a * b) / GCD
+}
+
+// Пример использования
+const num1 = 12;
+const num2 = 18;
+
+console.log(`GCD(${num1}, ${num2}) =`, gcd(num1, num2));
+console.log(`LCM(${num1}, ${num2}) =`, lcm(num1, num2));
+
+// Тест с другими числами
+const num3 = 24;
+const num4 = 36;
+
+console.log(`GCD(${num3}, ${num4}) =`, gcd(num3, num4));
+console.log(`LCM(${num3}, ${num4}) =`, lcm(num3, num4));
