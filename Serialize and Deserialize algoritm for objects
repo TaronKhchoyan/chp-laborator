@@ -1,0 +1,15 @@
+// Исходный объект
+const originalObject = {
+  name: "Taron",
+  age: 21,
+  skills: ["JavaScript", "C++", "Python"],
+  isStudent: true
+};
+
+// Сериализация (объект -> строка)
+const serialized = JSON.stringify(originalObject);
+console.log("Сериализованный объект:", serialized);
+
+// Десериализация (строка -> объект)
+const deserialized = JSON.parse(serialized);
+console.log("Десериализованный объект:", deserialized);
