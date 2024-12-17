@@ -1,0 +1,71 @@
+@echo off
+:menu
+cls
+echo 1. Էկրանին տպել տվյալ սարքի IPv4 եւ IPv6 հասցեները
+echo 2. Մուտքագրված համացանցային հանգույցի IP փաթեթի ցանցային ճանապարհը
+echo 3. Մուտքագրված համացանցային հանգույցի IP հասցեն
+echo 4. Գաղտնագրել ֆայլը / մուտքագրված տեքստը
+echo 5. Վերծանել ֆայլը / մուտքագրված տեքստը
+echo 6. ՍԵղմել ֆայլը / մուտքագրված տեքստը
+echo 7. Վերականգնել ֆայլը / մուտքագրված տեքստը
+echo 8. Ֆայլի արժեքը հաշվել
+echo 9. Ելք
+set /p choice=Ընտրեք գործողությունը (1-9):
+
+if %choice%==1 goto ipv
+if %choice%==2 goto traceroute
+if %choice%==3 goto iplookup
+if %choice%==4 goto encrypt
+if %choice%==5 goto decrypt
+if %choice%==6 goto hash
+if %choice%==7 goto restore
+if %choice%==8 goto exit
+goto menu
+
+:ipv
+echo IPv4 եւ IPv6 հասցեներ.
+ipconfig | findstr /i "IPv4 IPv6"
+pause
+goto menu
+
+:traceroute
+set /p url=Մուտքագրեք URL կամ hostname:
+tracert %url%
+pause
+goto menu
+
+:iplookup
+set /p hostname=Մուտքագրեք hostname կամ IP հասցե:
+nslookup %hostname%
+pause
+goto menu
+
+:encrypt
+set /p text=Մուտքագրեք գաղտնագրելին տեքստը:
+echo %text% | openssl enc -aes-256-cbc -base64 -out encrypted.txt
+echo Տեքստը գաղտնագրվել է encrypted.txt ֆայլում
+pause
+goto menu
+
+:decrypt
+set /p file=Մուտքագրեք ֆայլի անունը (encrypted.txt):
+openssl enc -d -aes-256-cbc -base64 -in %file% -out decrypted.txt
+echo Տեքստը վերծանվել է decrypted.txt ֆայլում
+pause
+goto menu
+
+:hash
+set /p file=Մուտքագրեք ֆայլի անունը (հաշվարկելու համար):
+certutil -hashfile %file% MD5
+pause
+goto menu
+
+:restore
+set /p file=Մուտքագրեք ֆայլի անունը (վերականգնելու համար):
+copy %file% restored.txt
+echo Ֆայլը վերականգնվել է restored.txt անունով
+pause
+goto menu
+
+:exit
+exit
