@@ -1,0 +1,85 @@
+class LZ77 {
+  constructor(windowSize = 20) {
+    this.windowSize = windowSize; // Размер окна поиска
+  }
+
+  // Функция сжатия
+  compress(input) {
+    const output = [];
+    let i = 0;
+
+    while (i < input.length) {
+      let matchLength = 0;
+      let matchDistance = 0;
+
+      // Ограничиваем окно поиска
+      const searchStart = Math.max(0, i - this.windowSize);
+      const searchWindow = input.substring(searchStart, i);
+
+      // Поиск совпадений
+      for (let j = 0; j < searchWindow.length; j++) {
+        const length = this.matchLength(
+          searchWindow.substring(j),
+          input.substring(i)
+        );
+
+        if (length > matchLength) {
+          matchLength = length;
+          matchDistance = searchWindow.length - j;
+        }
+      }
+
+      if (matchLength > 0) {
+        output.push([matchDistance, matchLength, input[i + matchLength]]);
+        i += matchLength + 1;
+      } else {
+        output.push([0, 0, input[i]]);
+        i++;
+      }
+    }
+
+    return output;
+  }
+
+  // Функция распаковки
+  decompress(compressed) {
+    let output = "";
+
+    for (const [distance, length, nextChar] of compressed) {
+      if (distance > 0) {
+        const start = output.length - distance;
+        output += output.substring(start, start + length);
+      }
+      if (nextChar) {
+        output += nextChar;
+      }
+    }
+
+    return output;
+  }
+
+  // Вспомогательная функция для поиска длины совпадения
+  matchLength(search, target) {
+    let length = 0;
+    while (
+      length < search.length &&
+      length < target.length &&
+      search[length] === target[length]
+    ) {
+      length++;
+    }
+    return length;
+  }
+}
+
+// Пример использования:
+const lz77 = new LZ77(15);
+
+const input = "abracadabraabracadabra";
+console.log("Оригинальная строка:", input);
+
+const compressed = lz77.compress(input);
+console.log("Сжатое:", compressed);
+
+const decompressed = lz77.decompress(compressed);
+console.log("Распакованное:", decompressed);
