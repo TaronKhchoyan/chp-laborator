@@ -1,0 +1,56 @@
+// 1. Рекурсивный алгоритм: Факториал
+function factorial(n) {
+    if (n <= 1) return 1; // Базовый случай
+    return n * factorial(n - 1); // Рекурсивный вызов
+}
+console.log(factorial(5)); // 120
+
+// 2. Итеративный алгоритм: Поиск максимального элемента массива
+function findMax(arr) {
+    let max = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+console.log(findMax([3, 7, 1, 9, 2])); // 9
+
+// 3. Сортировка: Сортировка пузырьком
+function bubbleSort(arr) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // Обмен элементов
+            }
+        }
+    }
+    return arr;
+}
+console.log(bubbleSort([4, 2, 7, 1, 9])); // [1, 2, 4, 7, 9]
+
+// 4. Работа с массивами: Уникальные элементы
+function uniqueElements(arr) {
+    return [...new Set(arr)];
+}
+console.log(uniqueElements([1, 2, 3, 2, 4, 3, 5])); // [1, 2, 3, 4, 5]
+
+// 5. Комбинация: Поиск суммы чисел, делящихся на 3 или 5
+function sumOfMultiples(limit) {
+    let sum = 0;
+    for (let i = 1; i < limit; i++) {
+        if (i % 3 === 0 || i % 5 === 0) {
+            sum += i;
+        }
+    }
+    return sum;
+}
+console.log(sumOfMultiples(10)); // 23 (3 + 5 + 6 + 9)
+
+// 6. Рекурсия и массивы: Реверс массива
+function reverseArray(arr) {
+    if (arr.length === 0) return [];
+    return [arr[arr.length - 1]].concat(reverseArray(arr.slice(0, -1)));
+}
+console.log(reverseArray([1, 2, 3, 4, 5])); // [5, 4, 3, 2, 1]
