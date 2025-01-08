@@ -1,0 +1,83 @@
+class Node {
+  constructor(char, freq, left = null, right = null) {
+    this.char = char;
+    this.freq = freq;
+    this.left = left;
+    this.right = right;
+  }
+}
+
+// Функция для построения дерева Хаффмана
+function buildHuffmanTree(frequencies) {
+  const nodes = [];
+
+  // Создаем начальные узлы для каждого символа
+  for (const [char, freq] of Object.entries(frequencies)) {
+    nodes.push(new Node(char, freq));
+  }
+
+  // Пока в списке узлов больше одного
+  while (nodes.length > 1) {
+    // Сортируем узлы по частоте
+    nodes.sort((a, b) => a.freq - b.freq);
+
+    // Извлекаем два узла с наименьшими частотами
+    const left = nodes.shift();
+    const right = nodes.shift();
+
+    // Создаем новый узел, объединяющий эти два узла
+    const newNode = new Node(null, left.freq + right.freq, left, right);
+
+    // Добавляем новый узел обратно в список
+    nodes.push(newNode);
+  }
+
+  // Возвращаем корень дерева
+  return nodes[0];
+}
+
+// Функция для создания кодов Хаффмана
+function createHuffmanCodes(node, code = "", codes = {}) {
+  if (!node) return;
+
+  // Если узел является листом (содержит символ)
+  if (node.char !== null) {
+    codes[node.char] = code;
+  }
+
+  // Рекурсивно обходим левую и правую ветви
+  createHuffmanCodes(node.left, code + "0", codes);
+  createHuffmanCodes(node.right, code + "1", codes);
+
+  return codes;
+}
+
+// Основная функция кодирования
+function huffmanCoding(text) {
+  // Подсчитываем частоты символов
+  const frequencies = {};
+  for (const char of text) {
+    frequencies[char] = (frequencies[char] || 0) + 1;
+  }
+
+  // Строим дерево Хаффмана
+  const huffmanTree = buildHuffmanTree(frequencies);
+
+  // Создаем коды Хаффмана
+  const huffmanCodes = createHuffmanCodes(huffmanTree);
+
+  // Кодируем текст
+  let encodedText = "";
+  for (const char of text) {
+    encodedText += huffmanCodes[char];
+  }
+
+  return { encodedText, huffmanCodes, huffmanTree };
+}
+
+// Пример использования
+const text = "hello world";
+const { encodedText, huffmanCodes } = huffmanCoding(text);
+
+console.log("Коды Хаффмана:", huffmanCodes);
+console.log("Закодированный текст:", encodedText);
